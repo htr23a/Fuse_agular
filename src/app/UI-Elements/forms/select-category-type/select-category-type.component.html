@@ -1,0 +1,20 @@
+<form class="example-form">
+    <mat-form-field class="example-full-width w-full mt-3">
+        <input #inputSearchCategory
+               placeholder="Catégorie..."
+               matInput
+               [value]="value"
+               [formControl]="searchCategoryControl"
+               [matAutocomplete]="auto"
+               (input)="onChange(inputSearchCategory.value)"
+               (focusout)="onTouch()"
+               required
+        >
+        <input type="reset" (click)="reset()" class="font-medium" value="X">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionCategoryChange($event)">
+            <mat-option *ngFor="let item of dataCategory" [value]="item.name" [id]="item">
+                {{ item.name }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>

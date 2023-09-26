@@ -1,0 +1,21 @@
+<mat-form-field class="example-full-width w-full">
+    <input
+        #input
+        [value]="value"
+        (input)="onChange(input.value)"
+        (focusout)="onTouch()"
+        placeholder="Recherche..."
+        matInput
+        [matAutocomplete]="auto"
+        [formControl]="searchControlVendor"
+        name="searchTerm"
+        (ngModelChange)="optionSelected = false"
+    >
+    <input type="button" (click)="remove()" value="X">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name" [id]="option">
+            {{option.name}} <br>
+            {{option.phone}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

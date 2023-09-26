@@ -1,0 +1,184 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div class="flex-auto p-6 sm:p-10">
+        <mat-card>
+            <form [formGroup]="addBillForm" isValidate (ngSubmit)="save()">
+                <mat-card-header class="items-center">
+                    <mat-card-subtitle class="text-lg mr-5 py-5">Nouvelle facture</mat-card-subtitle>
+                    <fuse-alert
+                        *ngIf="addBillForm.hasError('customValidation')"
+                        [appearance]="'soft'"
+                        [type]="'info'">
+                        <mat-icon class="icon-size-5"
+                                  fuseAlertIcon
+                                  [svgIcon]="'heroicons_solid:lock-open'">
+                        </mat-icon>
+                        Au moins un des champs fournisseur ou client doit être rempli.
+                    </fuse-alert>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class=" grid grid-rows-3 grid-flow-col gap-4 grid-cols-3 mt-6">
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Fournisseur</label>
+                            <div class="col-start-2 col-span-2">
+                                <app-typeahead-vendor formControlName="vendor"
+                                                      (bindDataVendor)="getDataVendor($event)"
+                                                      [min]="3"
+                                >
+                                </app-typeahead-vendor>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Client</label>
+                            <div class="col-start-2 col-span-2">
+                                <app-typeahead-contact formControlName="contact"
+                                                       (bindDataContact)="getDataContact($event)"
+                                                        [min]="3"
+                                ></app-typeahead-contact>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Catégories</label>
+                            <div class="col-start-2 col-span-2">
+                                <app-select-category-type formControlName="category"
+                                                          (bindDataCategory)="getDataCategory($event)">
+
+                                </app-select-category-type>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Tel.</label>
+                            <div class="col-start-2 col-span-2">
+                                {{VendorPhone}}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Tel.</label>
+                            <div class="col-start-2 col-span-2">
+                                {{ContactPhone}}
+                            </div>
+                        </div>
+
+                        <div></div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">N° Facture</label>
+                            <mat-form-field class="example-full-width col-start-2 col-span-2">
+                                <input type="text" formControlName="bill_number" matInput>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Facturé le</label>
+                            <mat-form-field class="example-full-width col-start-2 col-span-2">
+                                <input matInput [matDatepicker]="billedAt" formControlName="billed_at">
+                                <mat-datepicker-toggle matIconSuffix [for]="billedAt"></mat-datepicker-toggle>
+                                <mat-datepicker #billedAt></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-3 items-center">
+                            <label class="text-right mr-4 font-normal text-gray-500">Date d'échéance</label>
+                            <mat-form-field class="example-full-width col-start-2 col-span-2">
+                                <input matInput [matDatepicker]="dueAt" formControlName="due_at">
+                                <mat-datepicker-toggle matIconSuffix [for]="dueAt"></mat-datepicker-toggle>
+                                <mat-datepicker #dueAt></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <hr> <!-- separator -->
+
+                    <mat-card-subtitle class="text-lg mb-4">Produits/ services</mat-card-subtitle>
+                    <div formArrayName="BillItems">
+                        <table class="w-full">
+                            <thead class="bg-slate-200">
+                            <tr class="font-weight-bold bg-light">
+                                <th style="width:7%;">
+                                    <mat-icon aria-hidden="false" fontIcon="tune"></mat-icon>
+                                </th>
+                                <th>Nom</th>
+                                <th class="width-10 text-center">Unité</th>
+                                <th class="width-10 text-center">Quantité</th>
+                                <th class="width-15 text-center">Prix unitaire</th>
+                                <th class="width-20 text-center">Taxes</th>
+                                <th class="width-10 text-right pr-2.5">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of BillItems.controls; let i=index" [formGroupName]="i">
+                                    <td class="flex justify-center">
+                                        <button mat-icon-button (click)="removeItem(i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <ng-select
+                                            [items]="items"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            formArrayName="item"
+                                            class="w-60 max-w-xs"
+                                            (change)="onSelectionItemChange($event, item)"
+                                        >
+                                        </ng-select>
+                                    </td>
+                                    <td>
+                                        <ng-select
+                                            [items]="item.controls.units?.value"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            formArrayName="unit_id"
+                                            class="w-60 max-w-xs"
+                                            (change)="onSelectedUnit($event, item)"
+                                        >
+                                        </ng-select>
+                                    </td>
+
+                                    <td>
+                                        <input type="number" formControlName="quantity" class="form-control text-center"
+                                               [min]="1">
+                                    </td>
+
+                                    <td>
+                                        <input type="number" class="text-center form" formControlName="price"
+                                               [min]="1">
+                                    </td>
+
+                                    <td>
+                                        <ng-select formControlName="Taxes" class="px-3 text-gray-500"
+                                                   placeholder="Ajouter taxes">
+                                            <ng-option *ngFor="let tax of taxes" [value]="tax">{{tax}}</ng-option>
+                                        </ng-select>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" formControlName="total"
+                                               class="form-control text-right bg-transparent pr-2.5" readonly
+                                               [value]="getTotal(item)">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <div class="demo-button-container mt-4">
+                            <button mat-raised-button type="button" (click)="addItem()" class="demo-button">
+                                Ajout produit
+                            </button>
+                        </div>
+                    </div>
+                </mat-card-content>
+
+                <mat-card-actions class="justify-end mr-2">
+                    <button type="submit" [disabled]="!addBillForm.valid" class="mat-elevation-z0 mt-1.5" mat-mini-fab color="primary">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </form>
+        </mat-card>
+    </div>
+</div>
