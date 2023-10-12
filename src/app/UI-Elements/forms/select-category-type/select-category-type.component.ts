@@ -90,7 +90,6 @@ export class SelectCategoryTypeComponent implements ControlValueAccessor, OnInit
     loadDataCategory() {
         this.selectCategoryService.get('expense').subscribe(
             (data) => {
-                console.log(data)
                 this.dataCategory = data;
                 this.optionCategory = data;
             }

@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
+import {SessionService} from "../../../core/services/session/session.service";
+import {ImageService} from "../../../core/services/print/image.service";
 
 @Component({
     selector       : 'user',
@@ -28,6 +30,8 @@ export class UserComponent implements OnInit, OnDestroy
     @Input() showAvatar: boolean = true;
     user: User;
 
+    activeMenu: any
+
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -37,6 +41,8 @@ export class UserComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _userService: UserService,
+        private sessionService: SessionService,
+        private imageService: ImageService
     )
     {
     }
@@ -60,6 +66,11 @@ export class UserComponent implements OnInit, OnDestroy
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+
+        //get active menu
+        this.activeMenu = this.sessionService.getActiveMenu();
+        this.loadImage()
+
     }
 
     /**
@@ -102,5 +113,36 @@ export class UserComponent implements OnInit, OnDestroy
     signOut(): void
     {
         this._router.navigate(['/sign-out']);
+    }
+
+    private loadImage() {
+        //  BUS
+        if (this.activeMenu.bus && this.activeMenu.bus.root) {
+            console.log('load bus')
+            this.imageService.localeImageToBase64('assets/images/bus/logo_cotisse.png', 'logo_cotisse');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_sonatra_plus.jpg', 'logo_sonatra_plus');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_classic.png', 'logo_classic');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_anjara.png', 'logo_anjara');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_wam.png', 'logo_wam');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_att.jpeg', 'logo_att');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_cpctrv.png', 'logo_cpctrv');
+            this.imageService.localeImageToBase64('assets/images/bus/logo_maquauto.jpg', 'logo_maquauto');
+        }
+
+        //  MEN
+        if (this.activeMenu.men && this.activeMenu.men.root) {
+            console.log('load men')
+            this.imageService.localeImageToBase64('assets/images/logo/logo_ministere_education.jpg', 'education');
+            this.imageService.localeImageToBase64('assets/images/logo/logo_onapascoma.jpg', 'onapascoma');
+            this.imageService.localeImageToBase64('assets/images/logo/logo_republique.jpg', 'republique');
+        }
+
+        //  HOTEL
+        if (this.activeMenu.hotel && this.activeMenu.hotel.root) {
+            console.log('load hotel')
+            this.imageService.localeImageToBase64('assets/images/logo/logo_mvola.jpg', 'logo_mvola');
+            this.imageService.localeImageToBase64('assets/images/logo/logo_om.jpg', 'logo_om');
+            this.imageService.localeImageToBase64('assets/images/logo/logo_visa.png', 'logo_visa');
+        }
     }
 }

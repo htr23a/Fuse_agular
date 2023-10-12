@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-contact-preview-component',
@@ -11,16 +10,12 @@ export class ContactPreviewComponent {
   @Input() idPhoto;
   @Input() type;
 
-  constructor(public activeModal: NgbActiveModal) {
+  constructor() {
   }
 
   ngOnInit() {
     if (!this.type) {
       this.type = 'documents';
     }
-  }
-
-  dismiss() {
-    this.activeModal.dismiss();
   }
 }

@@ -38,6 +38,8 @@ import {PrintBillService} from "../../../../../core/services/print/printBill.ser
 import {FuseAlertComponent} from "../../../../../../@fuse/components/alert";
 import {CheckStatusRequiredService} from "../../../../../shared/services/checkStatusRequired.service";
 import {SettingsCompanyService} from "../../../../../core/services/settings-company.service";
+import {ExpenseService} from "../../../../../core/services/bill/expense.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-bill-add',
@@ -98,7 +100,9 @@ export class BillAddComponent implements OnInit {
     private sessionService: SessionService,
     private printService: PrintBillService,
     private checkStatusService: CheckStatusRequiredService,
-    private settingsCompanyService: SettingsCompanyService
+    private settingsCompanyService: SettingsCompanyService,
+    private expenseService: ExpenseService,
+    protected router: Router
   ) {
   }
 
@@ -200,7 +204,6 @@ export class BillAddComponent implements OnInit {
         else {
           this.items = [...this.items];
           this.option = [...this.items];
-          console.log(this.items)
         }
       })
       .catch((err) => {
@@ -246,7 +249,6 @@ export class BillAddComponent implements OnInit {
   }
 
   save() {
-    console.log(this.addBillForm)
     this.submitted = true
     if (this.addBillForm.valid) {
       const formValue = this.addBillForm.value;
@@ -274,18 +276,17 @@ export class BillAddComponent implements OnInit {
       );
 
       console.log(bill)
-      this.printService.bill(bill)
-      /* this.expenseService
+       this.expenseService
            .createWithUnit(bill)
            .then((res) => {
-               // this.router.navigate(['/expense/bill/detail/', res.id]);
+               this.router.navigate(['/expense/bill/detail/', res.id]);
                // this.notification.success(null, 'SAVE_SUCCESS');
                console.log('save success')
            })
            .catch((err) => {
                // this.notification.error(null, err.error);
                console.log(err.error)
-           });*/
+           });
     }
     else {
       console.log('form not valid')

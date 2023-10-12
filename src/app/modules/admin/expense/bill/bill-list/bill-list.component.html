@@ -37,7 +37,7 @@
                     <button mat-flat-button color="primary" (click)="navigateToAddBill()">Ajout facture</button>
                 </div>
 
-                <div class="example-container mat-elevation-z8 mt-5">
+                <div class="example-container mat-elevation-z8 mt-4">
                     <div class="example-loading-shade"
                          *ngIf="isLoadingResults || isRateLimitReached">
                         <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
@@ -48,7 +48,7 @@
 
                             <ng-container matColumnDef="id">
                                 <th matSort mat-header-cell *matHeaderCellDef>N°</th>
-                                <td mat-cell *matCellDef="let row">{{row.id}}</td>
+                                <td mat-cell *matCellDef="let row" (click)="navigateToDetail(row.id)" class="cursor-pointer text-blue-400">{{row.id}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="contact">
@@ -97,32 +97,34 @@
 
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef> N°</th>
-                        <td mat-cell *matCellDef="let element"></td>
+                        <td mat-cell *matCellDef="let element" (click)="navigateToDetail(element.id)" class="cursor-pointer text-blue-400">{{element.id}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="contact">
                         <th mat-header-cell *matHeaderCellDef> Contact</th>
-                        <td mat-cell *matCellDef="let element"></td>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.Vendor ? element.Vendor.name : (element.Contact ? element.Contact.name : '') }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="category">
                         <th mat-header-cell *matHeaderCellDef> Description</th>
-                        <td mat-cell *matCellDef="let element"></td>
+                        <td mat-cell *matCellDef="let element">{{element?.notes}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="amount">
                         <th mat-header-cell *matHeaderCellDef> Montant</th>
-                        <td mat-cell *matCellDef="let element"></td>
+                        <td mat-cell *matCellDef="let element">{{element.amount | currency: 'MGA': ''}}</td>
                     </ng-container>
 
-                    <ng-container matColumnDef="balance">
-                        <th mat-header-cell *matHeaderCellDef> Montant dû</th>
-                        <td mat-cell *matCellDef="let element"></td>
+                    <ng-container matColumnDef="created_at">
+                        <th mat-header-cell *matHeaderCellDef> Crée </th>
+                        <td mat-cell *matCellDef="let element">{{element.created_at | date}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="due_at">
                         <th mat-header-cell *matHeaderCellDef> Date d'echéance</th>
-                        <td mat-cell *matCellDef="let element"></td>
+                        <td mat-cell *matCellDef="let element">{{element.due_at | date}}</td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedDraftColumns"></tr>

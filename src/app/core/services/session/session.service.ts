@@ -39,5 +39,21 @@ export class SessionService {
 
         return {};
     }
+  getActiveMenu = () => {
+    const user = this.getUser();
+    return user ? user.activeMenu[user.activeRoleIndex || 0] : null;
+  }
+
+  getUserExtra = (type: 'account_id' | 'location_id') => {
+    const user = this.getUser();
+
+    if (user.hasOwnProperty('extra') && user.extra) {
+      if (user.extra.hasOwnProperty(type) && user.extra[type]) {
+        return user.extra[type];
+      }
+    }
+
+    return null;
+  };
 
 }

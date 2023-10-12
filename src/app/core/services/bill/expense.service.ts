@@ -4,6 +4,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {TableState} from "../../models/tableState";
 import Bill from "../../models/bill";
 import {environment} from "../../../../environments/environment";
+import Expense from "../../models/expense";
+import {AppService} from "../app/app.service";
 
 @Injectable({
     providedIn: 'root'
@@ -13,22 +15,22 @@ export class ExpenseService {
     }
     paginate(tableState: TableState): Observable<any> {
 
-        const url = [environment.apiPas,'expenses','paginate'].join('/');
+        const url = [AppService.API,'expenses','paginate'].join('/');
         return this.httpClient.post<any>(url, tableState);
     }
 
     select(item: string): Observable<any>{
-        const url = `${environment.apiPas}/contacts/${item}/select`;
+        const url = `${AppService.API}/contacts/${item}/select`;
         return this.httpClient.get<any>(url)
     }
 
     categoryExpense(type: string){
-        const url = `${environment.apiPas}/categories?type=${type}`;
+        const url = `${AppService.API}/categories?type=${type}`;
         return this.httpClient.get<any>(url)
     }
 
     createWithUnit(bill: Bill): Promise<Bill> {
-        const url = [environment.apiGrv, 'bills/units'].join('/');
+        const url = [AppService.API, 'bills/units'].join('/');
         return this.httpClient.post<Bill>(url,bill).pipe(
             catchError(err => {
                 if (err.error && typeof err.error.message === 'string') {
@@ -40,6 +42,9 @@ export class ExpenseService {
             })
         ).toPromise()
     }
-
+    get(id: number): Observable<Expense> {
+        const url = [AppService.API, 'expenses', id].join('/');
+        return this.httpClient.get<Expense>(url);
+    }
 }
 

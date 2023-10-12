@@ -19,13 +19,19 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id: 'expenseList',
                 title: 'Liste',
                 type: 'basic',
-                link: '/expense/list',
+                link : '/expense/bill/expenseList',
             },
             {
                 id   : 'bill',
                 title: 'Facturation',
                 type : 'basic',
                 link : '/expense/bill/list',
+            },
+            {
+                id   : 'search',
+                title: 'Recherche',
+                type : 'basic',
+                link : '/expense/search',
             }
         ]
     }

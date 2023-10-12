@@ -2,18 +2,23 @@ import {Routes} from '@angular/router';
 import {BillComponent} from "./bill.component";
 import {BillAddComponent} from "./bill-add/bill-add.component";
 import {BillListComponent} from "./bill-list/bill-list.component";
+import {BillDetailComponent} from "./bill-detail/bill-detail.component";
 
 export default [
     {
-        path: 'list',
+        path: 'expenseList',
         component: BillComponent,
     },
     {
-        path: 'bill/add',
+        path: 'add',
         component: BillAddComponent
     },
     {
-        path: 'bill/list',
+        path: 'list',
         component: BillListComponent
+    },
+    {
+        path: 'detail/:id',
+        component: BillDetailComponent
     }
 ] as Routes;

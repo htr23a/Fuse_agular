@@ -58,7 +58,7 @@ import {Router} from "@angular/router";
 export class BillListComponent implements OnInit, AfterViewInit {
 
     displayedColumns: string[] = ['id', 'contact', 'category', 'amount', 'balance', 'due_at'];
-    displayedDraftColumns = ['id', 'contact', 'category', 'amount', 'balance', 'due_at'];
+    displayedDraftColumns = ['id', 'contact', 'category', 'amount', 'created_at', 'due_at'];
     isLoadingResults = true;
     dateForm: FormGroup;
     data: any;
@@ -82,6 +82,7 @@ export class BillListComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.initFilterForm()
         this.debounceInputDescription()
+        this.loadDefaultDataDraft()
     }
 
     ngAfterViewInit(): void {
@@ -141,7 +142,6 @@ export class BillListComponent implements OnInit, AfterViewInit {
     }
 
     navigateToAddBill() {
-        console.log('navigate')
         this.router.navigateByUrl('/expense/bill/add')
     }
 
@@ -173,9 +173,17 @@ export class BillListComponent implements OnInit, AfterViewInit {
             map((res) => {
                 this.isLoadingResults = false
                 this.data = res.data
-                console.log(res)
             })
         ).subscribe()
+
+        this.billService.draft(filterConfig).subscribe({
+            next: (res)=>{
+                this.dataDraft = res
+            },
+            error: (err)=>{
+                console.log(err)
+            }
+        })
     }
 
     loadDataBillDefaultConfig() {
@@ -264,6 +272,23 @@ export class BillListComponent implements OnInit, AfterViewInit {
     }
 
     // ------------ Draft component -------------//
+    loadDefaultDataDraft(){
+        const date = {
+            start: this.dateForm.value.start,
+            end: this.dateForm.value.end
+        }
+        this.billService.draft(date).subscribe({
+            next: (res)=>{
+                this.dataDraft = res
+            },
+            error: (err)=>{
+                console.log(err)
+            }
+        })
+    }
 
+    navigateToDetail(id: number){
+        this.router.navigateByUrl(`expense/bill/detail/${id}`)
+    }
 
 }

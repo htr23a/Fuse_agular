@@ -71,11 +71,24 @@ export class AuthSignInComponent implements OnInit {
     /**
      * On init
      */
-    ngOnInit(): void {
+   /* ngOnInit(): void {
         // Create the form
         this.signInForm = this._formBuilder.group({
             email: [null, [Validators.required, Validators.email]],
             password: [null, Validators.required]
+        });
+    }*/
+
+    ngOnInit(): void {
+        this.api = AppService.API;
+        this.display_id = localStorage.getItem('DISPLAY_ID');
+        this.signInForm = this._formBuilder.group({
+            email: [null, [Validators.required, Validators.email]],
+            password: [null, Validators.required],
+            api: [
+                this.api || null,
+                Validators.required
+            ],
         });
     }
 
@@ -86,17 +99,22 @@ export class AuthSignInComponent implements OnInit {
     /**
      * Sign in
      */
-    signIn() {
+    /*signIn() {
         this.submitted = true;
 
         if (this.signInForm.valid) {
             const formValue = this.signInForm.value;
+
+            AppService.API = `${formValue.api}`;
+
 
             this.authService.login(formValue.email, formValue.password)
                 .toPromise()
                 .then(res => {
                     if (res && res['token']) {
                         const user = res['user'];
+
+                        user.activeRoleIndex = 0;
 
                         sessionStorage.setItem('token', res['token']);
                         sessionStorage.setItem('session', JSON.stringify({
@@ -120,7 +138,81 @@ export class AuthSignInComponent implements OnInit {
         else {
             this.notification.error(null, 'FORM_NOT_VALID');
         }
-    }
+    }*/
+    signIn() {
+        this.submitted = true;
 
+        if (this.signInForm.valid) {
+            const formValue = this.signInForm.value;
+
+
+            AppService.API = `${formValue.api}`;
+
+            this.authService.login(formValue.email, formValue.password)
+                .toPromise()
+                .then(res => {
+                    if (res && res['token']) {
+                        const user = res['user'];
+
+                        user.activeRoleIndex = 0;
+
+                        sessionStorage.setItem('logedIn', 'loged')
+                        sessionStorage.setItem('token', res['token']);
+                        sessionStorage.setItem('session', JSON.stringify({
+                            user: user,
+                            config: res['config']
+                        }));
+
+                        /*let layout = 'bus'; // Par défaut
+                        if (formValue.api === 'https://api.capsule.mg/pascoma') {
+                        layout = 'hotel';
+                        }
+
+                        this.setLayout(layout)*/
+
+                        /*Swal.fire({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            showClass: {
+                                backdrop: 'swal2-noanimation',
+                                popup: '',
+                                icon: ''
+                            },
+                            timer: 9000,
+                            title: 'Success!',
+                            text: 'Vous etes Authentifier',
+                            icon: 'success',
+                        });*/
+
+                        const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
+                        this._router.navigateByUrl(redirectURL);
+                    }
+                })
+                .catch(err => {
+                    if (err.status == 400) {
+                        this.alert = {
+                            type: 'error',
+                            message: 'Compte introuvable'
+                        };
+                    }
+                    if (err.status == 500) {
+                        this.alert = {
+                            type: 'error',
+                            message: 'Mot de passe incorrect'
+                        };
+                    }
+                    this.showAlert = true;
+                });
+        }
+        else {
+            /*Swal.fire({
+                toast: true, position: 'top',
+                title: 'Attention',
+                text: 'Form non valider',
+                icon: 'warning', showConfirmButton: false, timer: 3000,
+            })*/
+        }
+    }
 
 }

@@ -25,6 +25,8 @@ import {
 import {ExpenseService} from "../../../../core/services/bill/expense.service";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSelectModule} from "@angular/material/select";
+import {InventoryService} from "../../../../core/services/inventory/inventory.service";
+import Item from "../../../../core/models/item";
 
 @Component({
     selector: 'app-bill',
@@ -70,6 +72,7 @@ export class BillComponent implements OnInit, AfterViewInit {
     data: any
     dataCategory: any
     optionCategory: any
+    items: Item[] = [];
 
     dataAmount: string[] = ['Airtel money', 'BNI P@Y', 'Carte credit', 'Chèque', 'Espece', 'MVola', 'Orange money', 'Récompense', 'SP', 'Virement bancaire', 'Western Union']
 
@@ -79,7 +82,7 @@ export class BillComponent implements OnInit, AfterViewInit {
     @ViewChild('inputSearchCategory') input: ElementRef<HTMLInputElement>;
     @ViewChild('inputSearchAmount') inputAmount: ElementRef<HTMLInputElement>;
 
-    constructor(private _formBuilder: FormBuilder, private expenseService: ExpenseService) {
+    constructor(private _formBuilder: FormBuilder, private expenseService: ExpenseService, private inventoryService: InventoryService) {
     }
 
     ngAfterViewInit(): void {
@@ -127,6 +130,7 @@ export class BillComponent implements OnInit, AfterViewInit {
         this.debounceInputContact()
         this.debounceInputDescription()
         this.loadDataCategory()
+        this.inventoryService.getInventoryByDefaultRoom(this.items);
     }
 
     filterCategory(): void {

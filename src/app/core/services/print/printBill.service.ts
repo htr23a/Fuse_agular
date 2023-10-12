@@ -10,6 +10,7 @@ import {SessionService} from "../session/session.service";
 import moment from "moment";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import {ImageService} from "./image.service";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
@@ -26,7 +27,7 @@ export class PrintBillService{
         const total_due = _sumBy(bill.BillItems, item => item.quantity * item.price);
         const table_body = [];
         const total_payment = _sumBy(bill.Payments, 'amount');
-        const total_tax = _sumBy(bill.BillItems, (item) => item.quantity * item.Taxes);
+        const total_tax = _sumBy(bill.BillItems, (item) => item.quantity * item.tax);
         const balance = total_due + total_tax - total_payment;
 
         //  Table header
@@ -167,13 +168,13 @@ export class PrintBillService{
     bill(b: Bill, isGrouped?: boolean) {
         const bill = _cloneDeep(b);
         const bill_number = bill.bill_number;
-        const contact_phone = bill.contact && bill.contact.phone ? this.utilityService.phoneFormat(bill.contact.phone) : '-';
-        const vendor_phone = bill.vendor ? this.utilityService.phoneFormat(bill.vendor.phone) : null;
+        const contact_phone = bill.Contact && bill.contact.phone ? this.utilityService.phoneFormat(bill.contact.phone) : '-';
+        const vendor_phone = bill.Vendor ? this.utilityService.phoneFormat(bill.Vendor.phone) : null;
 
         const billContact = {
             phone: contact_phone,
-            name: bill.contact ? bill.contact.name : null,
-            address: bill.contact ? bill.contact.address : null
+            name: bill.Contact ? bill.contact.name : null,
+            address: bill.Contact ? bill.contact.address : null
         };
 
         const bill_type =  'FACTURE';
@@ -192,7 +193,12 @@ export class PrintBillService{
                 opacity: 0.04
             },
             content: [
-
+                /*{
+                    image: 'logo',
+                    alignment: 'right',
+                    width: 100,
+                    margin: [0, 0, 14, 0]
+                },*/
                 {text: '', style: 'separator-xs'},
                 {
                     canvas: [
@@ -211,9 +217,9 @@ export class PrintBillService{
                             width: '*',
                             text: [
                                 {text: 'Fournisseur\n'},
-                                {text: `${bill.vendor?.name || ''}\n`},
+                                {text: `${bill.Vendor?.name || ''}\n`},
                                 {text: (vendor_phone || '') + '\n'},
-                                {text: (bill.vendor?.address || '') + '\n'}
+                                {text: (bill.Vendor?.address || '') + '\n'}
                             ],
                         }
                     ]
@@ -335,9 +341,11 @@ export class PrintBillService{
                 'table-cell': {
                     margin: 7
                 }
+            },
+            images: {
+                logo: ImageService.logo
             }
-        };
-
+        }
         pdfMake.createPdf(dd).print();
     }
 }

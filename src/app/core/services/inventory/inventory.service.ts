@@ -1,16 +1,19 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import Item, {ItemInventory} from "../../models/item";
+import Item, {ItemInventory, ItemUnit} from "../../models/item";
 import {map} from "rxjs";
 import {environment} from "../../../../environments/environment";
+import {AppService} from "../app/app.service";
 
 @Injectable({
-    providedIn:'root'
+    providedIn: 'root'
 })
-export class InventoryService{
+export class InventoryService {
     public static KEY = 'TS_COMPANY_SETTINGS';
+
     constructor(private http: HttpClient) {
     }
+
     getInventoryByDefaultRoom(items?: Item[]) {
 
         const roomId = this.getDefaultRoomId();
@@ -32,13 +35,12 @@ export class InventoryService{
     };
 
     getInventoryByRoom(room_id: number, items?: Item[]) {
-        const url = [environment.apiGrv, 'inventory', 'room', room_id].join('/');
+        const url = [AppService.API, 'inventory', 'room', room_id].join('/');
         return this.http.get<ItemInventory[]>(url)
             .pipe(
                 map(inventories => {
                     if (items) {
                         this.mapInventoriesToItems(inventories, items);
-                        console.log(items)
                     }
                     return inventories;
                 })
@@ -70,7 +72,8 @@ export class InventoryService{
                             break;
                         }
                     }
-                } else {
+                }
+                else {
                     let inv = {
                         ...inventory.Item,
                         available: value,
@@ -81,5 +84,10 @@ export class InventoryService{
                 }
             }
         }
+    }
+
+    getItemUnits(): Promise<ItemUnit[]> {
+        const url = [AppService.API, 'inventory/units'].join('/');
+        return this.http.get<ItemUnit[]>(url).toPromise();
     }
 }
