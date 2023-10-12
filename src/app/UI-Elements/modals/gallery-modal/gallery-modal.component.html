@@ -1,0 +1,20 @@
+
+<ngb-carousel
+        *ngIf="displayedItems"
+        [showNavigationArrows]="true"
+        [showNavigationIndicators]="true"
+>
+
+        <ng-template ngbSlide *ngFor="let item of displayedItems">
+            <div class="picsum-img-wrapper">
+                <div class="wrap">
+                <img [hidden]="item.isNotSupported" [itemRef]="item" [docType]="data.type"
+                     [docId]="item.doc_id" (callback)="setLoading($event)" [alt]="item.doc_name" appImages-rc
+                >
+                </div>
+                </div>
+        </ng-template>
+</ngb-carousel>
+
+
+

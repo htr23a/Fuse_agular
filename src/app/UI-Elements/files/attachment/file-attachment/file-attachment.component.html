@@ -1,0 +1,52 @@
+<div class="grid grid-cols-4 gap-4">
+    <mat-form-field class="example-full-width">
+        <input matInput
+               [name]="'docname-' + route"
+               [id]="'docname-' + route"
+               [(ngModel)]="doc_name"
+               placeholder="Ecrire nom du fichier...">
+    </mat-form-field>
+    <div class="col-auto">
+        <label [for]="'upload-attachment-' + uniqueId" class="pointer d-inline">
+            <input type="file" ng2FileSelect [name]="'upload-attachment-' + uniqueId"
+                   [uploader]="uploader"
+                   [id]="'upload-attachment-' + uniqueId"
+                   (click)="uploadDocument($event)"
+            />
+        </label>
+    </div>
+</div>
+
+<div class="table-responsive mt-3">
+    <table class="table table-bordered mb-0">
+        <thead>
+        </thead>
+        <tbody>
+        <tr *ngIf="attachments && attachments.length === 0">
+            <td class="text-center" translate>Aucun document</td>
+        </tr>
+        <tr *ngIf="!attachments">
+            <td class="vertical-align-middle">
+                <div class="w-100 text-center">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
+            </td>
+        </tr>
+        <ng-container *ngIf="attachments">
+            <tr *ngFor="let attachment of attachments">
+                <td class="vertical-align-middle">
+                    <span class="btn btn-sm" *ngIf="formatDocName(attachment) as name" [title]="name">{{name | slice:0:28}}<ng-container *ngIf="name.length > 28">...</ng-container></span>
+                    <button type="button" *ngIf="canDelete && onDelete" appXhrBtnIndicator
+                            class="btn btn-sm btn-danger btn-inverse pull-right"
+                            (click)="deleteAttachment(attachment.doc_id)">Suppr</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-inverse pull-right"  *ngIf="isImage(attachment)"
+                            (click)="previewDoc(attachment.doc_id)" > view </button>
+                    <button type="button" class="btn btn-sm btn-primary btn-inverse pull-right"  *ngIf="!isImage(attachment)"
+                            (click)="download(attachment)">
+                        down </button>
+                </td>
+            </tr>
+        </ng-container>
+        </tbody>
+    </table>
+</div>

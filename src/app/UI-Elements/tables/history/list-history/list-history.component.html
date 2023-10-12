@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="saveHistory()">
+    <table mat-table [dataSource]="sortedData" class="mat-elevation-z0">
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element" [innerHTML]="displayItems(element)">{{element.description}}</td>
+
+        </ng-container>
+
+        <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef> Crée </th>
+            <td mat-cell *matCellDef="let element">{{element.created_at | date}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">{{element.status_code}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef> Utilisateur </th>
+            <td mat-cell *matCellDef="let element">{{element.User ? element.User.name : element.user_id}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedListColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedListColumns;"></tr>
+
+    </table>
+
+    <div class="grid grid-cols-6 gap-2 mt-5">
+        <mat-form-field class="example-full-width col-span-5">
+            <input matInput formControlName="description" placeholder="Description" >
+        </mat-form-field>
+        <button type="submit" mat-flat-button class="but-send-description bg-green-500">Ajouter</button>
+    </div>
+</form>
+

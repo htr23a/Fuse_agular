@@ -1,0 +1,28 @@
+tbody td{
+  border: 1px solid #d0d0d0;
+}
+.hover-underline:hover{
+    text-decoration: underline;
+}
+.action{
+    border-top:1px solid #d0d0d0 ;
+    padding-top: 20px;
+}
+.other-action{
+    border: 1px solid #d0d0d0;
+    padding: 10px 20px;
+    border-radius: 2px !important;
+}
+.color-white{
+    color: white !important;
+}
+.border-5{
+    border-radius: 5px !important;
+}
+.status{
+    top: 0;
+    right: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+}

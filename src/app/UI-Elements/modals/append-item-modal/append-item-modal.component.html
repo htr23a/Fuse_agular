@@ -1,0 +1,75 @@
+<div class="modal">
+    <form [formGroup]="articleForm" (ngSubmit)="saveArticle()">
+        <h1 class="text-xl	">Ajout article</h1>
+        <div mat-dialog-content>
+            <ng-container matColumnDef="searchArticle">
+                <mat-form-field class="example-full-width w-full mt-3">
+                    <input #inputSearchArticle
+                           type="text"
+                           placeholder="Catégorie..."
+                           matInput
+                           formControlName="item"
+                           [matAutocomplete]="auto"
+                           (input)="filterArticle()"
+                           (focus)="filterArticle()"
+                    >
+                    <input type="button" (click)="reset()" class="font-medium" value="X">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionUnitChange($event)"
+                                      [displayWith]="displayFn">
+                        <mat-option *ngFor="let item of items" [value]="item">
+                            {{ item.name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </ng-container>
+
+            <mat-form-field class="example-full-width w-full mt-5">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+            </mat-form-field>
+
+            <div class="grid grid-cols-3 gap-4 mt-5">
+                <mat-form-field>
+                    <mat-label>Unité</mat-label>
+                    <mat-select formControlName="unit_id" name="unit"
+                        [(value)]="selectedUnit"
+                    >
+                        <mat-option *ngFor="let unit of (selected ? units: articleForm.controls.units?.value || [])"
+                                    (onSelectionChange)="onSelect($event)"
+                                    [value]="unit.id" [id]="unit">
+                            {{unit.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Quantité</label>
+                    <input type="number" formControlName="quantity"
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-4 min-height"
+                           [min]="1">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Prix unitaire</label>
+                    <input type="number" formControlName="price"
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-4 min-height"
+                           [min]="1">
+                </div>
+            </div>
+
+            <mat-form-field class="w-full mt-5">
+                <mat-label>Taxes</mat-label>
+                <mat-select formControlName="Taxes" name="unit">
+                    <mat-option *ngFor="let tax of taxes" [value]="tax">
+                        {{tax}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-actions class="flex justify-between">
+            <h4>Total: <b>{{getTotal(articleForm)| currency: 'MGA': ''}}</b></h4>
+            <button type="submit" mat-flat-button color="primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+

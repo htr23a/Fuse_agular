@@ -1,0 +1,19 @@
+<div class="grid-rows-1 flex justify-center mt-6">
+    <div class="col-md-4">
+        <form [formGroup]="searchForm" (ngSubmit)="search()">
+            <mat-card>
+                <mat-card-content>
+                    <mat-form-field class="example-form-field w-10/12">
+                        <mat-label>RECHERCHER FACTURE PAR ID</mat-label>
+                        <input matInput type="search"  placeholder="ID facture" formControlName="term"
+                               [class.error]="submitted && searchForm.get('term').status === 'INVALID'">
+                    </mat-form-field>
+                    <button type="submit" mat-mini-fab color="primary" class="mat-elevation-z0">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </mat-card-content>
+            </mat-card>
+        </form>
+    </div>
+</div>
+
