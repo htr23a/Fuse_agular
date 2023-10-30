@@ -19,19 +19,19 @@ import '@angular/localize/init';
   selector: 'app-gallery-modal',
   templateUrl: './gallery-modal.component.html',
   styleUrls: ['./gallery-modal.component.scss'],
-  imports: [
-    NgClass,
-    NgIf,
-    NgForOf,
-    DatePipe,
-    RouterLink,
-    AppModule,
-    NgbTooltip,
-    MatDialogModule,
-    MatButtonModule,
-    NgbSlide,
-    NgbCarousel
-  ],
+    imports: [
+        NgClass,
+        NgIf,
+        NgForOf,
+        DatePipe,
+        RouterLink,
+        AppModule,
+        NgbTooltip,
+        MatDialogModule,
+        MatButtonModule,
+        NgbSlide,
+        NgbCarousel,
+    ],
   providers: [
     NgbCarouselConfig
   ],

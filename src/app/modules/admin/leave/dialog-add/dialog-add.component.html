@@ -1,0 +1,60 @@
+<div class="badge" (click)="resetFrom()">
+   Solde restant : {{numberDayOff}} jour(s) / Congé de {{dateDiff}} jour(s)
+</div>
+<form [formGroup]="addForm" (ngSubmit)="addLeave()">
+    <h1 mat-dialog-title class="text-xl">Ajout nouveau congé</h1>
+    <div mat-dialog-content class="mt-2">
+            <div class=" grid grid-cols-4 gap-4">
+                <div class="col-span-3">
+                    <mat-form-field class="w-full">
+                        <mat-label>Contact</mat-label>
+                        <input type="text"
+                               placeholder="Selectionner..."
+                               matInput
+                               formControlName="contact"
+                               [matAutocomplete]="auto">
+                        <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn"
+                                          (optionSelected)="onOptionSelected($event)" #auto="matAutocomplete">
+                            <mat-option *ngFor="let item of contacts" [value]="item">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="color">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Couleur</mat-label>
+                        <input
+                            type="color"
+                            formControlName="color"
+                            matInput
+                            (change)="refresh.next(undefined)"
+                        />
+                    </mat-form-field>
+                </div>
+                <mat-form-field class="col-span-2">
+                    <mat-label>Date de début du congé</mat-label>
+                    <input (dateChange)="startDate($event)" [min]="minDate" matInput formControlName="start_at" [matDatepicker]="start">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="start"></mat-datepicker-toggle>
+                    <mat-datepicker #start></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="col-span-2">
+                    <mat-label>Date fin du congé</mat-label>
+                    <input (dateChange)="endDate($event)" [min]="addForm.get('start_at').value" [max]="maxDate" formControlName="end_at" matInput [matDatepicker]="end">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="end"></mat-datepicker-toggle>
+                    <mat-datepicker #end></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="col-span-4">
+                    <mat-label>Motif</mat-label>
+                    <textarea matInput formControlName="pattern" placeholder="Motif..."></textarea>
+                </mat-form-field>
+            </div>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button type="submit" mat-button >Enregister</button>
+    </div>
+</form>

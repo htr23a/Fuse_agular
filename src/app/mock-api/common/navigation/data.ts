@@ -34,6 +34,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link : '/expense/search',
             }
         ]
+    },
+    {
+        id: 'leave',
+        title: 'Congé',
+        type: 'basic',
+        icon:'heroicons_solid:calendar-days',
+        link: '/leave'
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [

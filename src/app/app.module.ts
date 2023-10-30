@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {AsyncPipe, DatePipe, NgForOf} from "@angular/common";
+import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -12,40 +12,50 @@ import {MatButtonModule} from "@angular/material/button";
 import {ListHistoryComponent} from "./UI-Elements/tables/history/list-history/list-history.component";
 import {MatCardModule} from "@angular/material/card";
 import {MatTableModule} from "@angular/material/table";
-import {FileAttachmentComponent} from "./UI-Elements/files/attachment/file-attachment/file-attachment.component";
-import {FileUploadModule} from "ng2-file-upload";
-import { GalleryModalComponent } from './UI-Elements/modals/gallery-modal/gallery-modal.component';
 import {ImageDirective} from "./shared/directive/image.directive";
-import { SearchComponent } from './modules/admin/expense/search/search.component';
+import { CalendarComponent } from './modules/admin/leave/calendar/calendar.component';
+
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
-    imports: [
-        AsyncPipe,
-        FormsModule,
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatOptionModule,
-        NgForOf,
-        MatDialogModule,
-        MatButtonModule,
-        MatCardModule,
-        MatTableModule,
-        DatePipe,
-        ReactiveFormsModule,
-    ],
+  imports: [
+    AsyncPipe,
+    FormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    NgForOf,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule,
+    MatTableModule,
+    DatePipe,
+    ReactiveFormsModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
+    NgSwitch,
+    NgSwitchCase,
+    JsonPipe,
+  ],
     declarations: [
         CustomValidationDirective,
         ConfirmDialogComponent,
         ListHistoryComponent,
-        ImageDirective
+        ImageDirective,
+        CalendarComponent,
   ],
     providers: [],
-  exports: [
-    CustomValidationDirective,
-    ListHistoryComponent,
-    ImageDirective,
-  ],
+    exports: [
+        CustomValidationDirective,
+        ListHistoryComponent,
+        ImageDirective,
+        CalendarComponent,
+    ],
 })
 export class AppModule {
 

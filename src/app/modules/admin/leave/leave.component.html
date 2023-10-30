@@ -1,0 +1,18 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div class="flex-auto p-6 sm:p-10">
+        <mat-card>
+            <mat-card-content>
+                <button mat-flat-button color="primary" (click)="addEvent()" class="to-right">Ajout congé</button>
+                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                    <mat-tab label="Résumer">
+                        <app-summary></app-summary>
+                    </mat-tab>
+                    <mat-tab label="Calendrier">
+                        <app-calendar></app-calendar>
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+

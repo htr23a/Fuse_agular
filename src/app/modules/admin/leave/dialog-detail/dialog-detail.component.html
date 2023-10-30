@@ -1,0 +1,74 @@
+<!--
+<h1 mat-dialog-title>Install Angular</h1>
+<div mat-dialog-content class="mat-typography">
+    <div>
+        Action:
+        <pre>{{ data.modalData?.action }}</pre>
+    </div>
+    <div>
+        Event:
+        <pre>{{ data.modalData?.event | json }}</pre>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Ok</button>
+</div>
+-->
+
+
+<form [formGroup]="profileForm">
+    <div class="badge">
+        {{numberDayOff}} jour(s)
+    </div>
+    <h1 mat-dialog-title>Profile</h1>
+    <div mat-dialog-content class="mat-typography">
+        <div class=" grid grid-cols-2 gap-4">
+            <mat-form-field class="example-full-width">
+                <mat-label>Nom et prénom</mat-label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Adresse</mat-label>
+                <input matInput formControlName="address">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Numéro de téphone</mat-label>
+                <input matInput formControlName="phone">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Poste</mat-label>
+                <input matInput formControlName="job">
+            </mat-form-field>
+
+            <h1 class="col-span-2 text-lg underline text-sky-700">Détail congé</h1>
+
+            <mat-form-field>
+                <mat-label>Date de sortie</mat-label>
+                <input matInput [matDatepicker]="start"  formControlName="start_at">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Date d'arrivée</mat-label>
+                <input matInput [matDatepicker]="end" formControlName="end_at">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width col-span-2">
+                <mat-label>Motif de congé</mat-label>
+                <textarea matInput formControlName="title" placeholder="Congé de ..."></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Ok</button>
+    </div>
+</form>
+

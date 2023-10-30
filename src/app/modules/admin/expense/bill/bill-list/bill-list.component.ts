@@ -280,6 +280,7 @@ export class BillListComponent implements OnInit, AfterViewInit {
         this.billService.draft(date).subscribe({
             next: (res)=>{
                 this.dataDraft = res
+                console.log(res)
             },
             error: (err)=>{
                 console.log(err)

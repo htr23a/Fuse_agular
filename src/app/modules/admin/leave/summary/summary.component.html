@@ -1,0 +1,150 @@
+<div class="grid grid-flow-col gap-2 mb-4">
+    <form [formGroup]="dateForm" (ngSubmit)="filter()">
+        <div class="grid grid-cols-6 gap-2">
+            <mat-form-field>
+                <input matInput [matDatepicker]="start" formControlName="start">
+                <mat-datepicker-toggle matIconSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput [matDatepicker]="end" formControlName="end">
+                <mat-datepicker-toggle matIconSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <button type="submit" class="mat-elevation-z0 mt-1.5" mat-mini-fab color="primary">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0 ng-star-inserted">
+    <div class="flex flex-col flex-auto p-6 bg-card tw-shadow rounded-1xl overflow-hidden">
+        <div class="flex flex-col items-center mt-2">
+            <div class="text-6xl sm:text-6xl font-bold tracking-tight leading-none text-blue-400">21</div>
+            <div class="text-lg pt-1.5 font-medium text-blue-600 dark:text-blue-500">Total congé</div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 bg-card tw-shadow rounded-1xl overflow-hidden">
+        <div class="flex flex-col items-center mt-2">
+            <div class="text-6xl sm:text-6xl font-bold tracking-tight leading-none text-blue-400">15</div>
+            <div class="text-lg pt-1.5 font-medium text-blue-600 dark:text-blue-500">Congé approuvé</div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 bg-card tw-shadow rounded-1xl overflow-hidden">
+        <div class="flex flex-col items-center mt-2">
+            <div class="text-6xl sm:text-6xl font-bold tracking-tight leading-none text-blue-400">3</div>
+            <div class="text-lg pt-1.5 font-medium text-blue-600 dark:text-blue-500">Congé en attente</div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 bg-card tw-shadow rounded-1xl overflow-hidden">
+        <div class="flex flex-col items-center mt-2">
+            <div class="text-6xl sm:text-6xl font-bold tracking-tight leading-none text-blue-400">6</div>
+            <div class="text-lg pt-1.5 font-medium text-blue-600 dark:text-blue-500">Congé refusé</div>
+        </div>
+    </div>
+</div>
+
+<div class="example-container mat-elevation-z3 mt-4">
+    <div class="example-loading-shade"
+         *ngIf="isLoadingResults || isRateLimitReached">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+
+    <div class="example-table-container">
+        <table mat-table [dataSource]="data" class="example-table">
+
+            <ng-container matColumnDef="contact">
+                <th matSort mat-header-cell *matHeaderCellDef>Contact</th>
+                <td mat-cell *matCellDef="let row" (click)="navigateToHistory(row.contact.id)" class="cursor-pointer text-blue-400">
+                    {{row.contact.name}} <br>  <span class="text-xm text-slate-400">{{row.contact.phone}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pattern">
+                <th matSort mat-header-cell *matHeaderCellDef>Motif</th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.pattern}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="start_date">
+                <th matSort mat-header-cell *matHeaderCellDef>Date de sortie</th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.start_date | date}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="end_date">
+                <th matSort mat-header-cell *matHeaderCellDef>Date d'entrée</th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.end_date | date}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th matSort mat-header-cell *matHeaderCellDef class="text-center">Etat</th>
+                <td mat-cell *matCellDef="let row">
+                    <span class="bg-green-100 status text-green-600" *ngIf="row.status === 'VALID'">
+                        Approuvé
+                    </span>
+                    <span class="bg-yellow-100 status text-yellow-600" *ngIf="row.status === 'IN PROGRESS'">
+                        En attente
+                    </span>
+                    <span class="bg-red-100 status text-red-600" *ngIf="row.status === 'REJECT'">
+                        Refusé
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="user">
+                <th class="text-center" matSort mat-header-cell *matHeaderCellDef >Utilisateur</th>
+                <td class="text-center" mat-cell *matCellDef="let row">
+                    {{row.user.name}} <br> <span class="text-xm text-slate-400">{{row.user.phone}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th matSort mat-header-cell *matHeaderCellDef class="text-center">Action</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="action text-center" *ngIf="row.status === 'IN PROGRESS'">
+                        <button [matMenuTriggerFor]="confirm" mat-icon-button color="primary">
+                            <mat-icon>done</mat-icon>
+                        </button>
+                        <!-- confirm dialog for accept -->
+                        <mat-menu #confirm="matMenu" class="py-2 px-4">
+                            <div class="title">
+                                <h6 class="text-base">Voulez-vous vraiment faire cette action ?</h6>
+                            </div>
+                            <div class="actions mt-3">
+                                <button mat-button>Non</button>
+                                <button mat-button (click)="accept(row)">Oui</button>
+                            </div>
+                        </mat-menu>
+
+                        <button  mat-icon-button (click)="openRejectModal(row)" color="warn">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+            <ng-container *matNoDataRow>
+                <tr>
+                    <td colspan="{{ displayedColumns.length }}">Aucun enregistrement</td>
+                </tr>
+            </ng-container>
+        </table>
+    </div>
+    <mat-paginator [length]="resultsLength" [pageSize]="25"></mat-paginator>
+</div>
+
+
