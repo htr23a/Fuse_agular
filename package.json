@@ -29,6 +29,8 @@
         "@ng-select/ng-select": "^11.1.1",
         "@ngneat/transloco": "4.2.7",
         "@popperjs/core": "^2.11.8",
+        "@ng-idle/core": "13.0.0",
+        "@ng-idle/keepalive": "13.0.0",
         "angular-calendar": "^0.31.0",
         "apexcharts": "3.40.0",
         "bootstrap": "^5.3.2",

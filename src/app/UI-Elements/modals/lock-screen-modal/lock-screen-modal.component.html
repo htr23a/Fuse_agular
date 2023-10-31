@@ -1,0 +1,24 @@
+<div class="cover-item">
+    <form [formGroup]="lockForm" (ngSubmit)="signIn()" >
+        <h5>{{user?.name}}</h5>
+        <div class="content relative mt-4">
+            <mat-form-field class="example-form-field w-100">
+                <mat-label>Mot de passe</mat-label>
+                <input matInput type="password" formControlName="password">
+            </mat-form-field>
+
+            <button class="absolute but-sub" mat-icon-button type="submit">
+                <mat-icon class="ic">login</mat-icon>
+            </button>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <a (click)="logout()" tabindex="0"
+                   class="text-warning text-underline pointer font-weight-bold">
+                    Changer d'utilisateur ?
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+

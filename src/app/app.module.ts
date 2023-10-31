@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgSwitch, NgSwitchCase} from "@angular/common";
+import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -18,36 +18,45 @@ import { CalendarComponent } from './modules/admin/leave/calendar/calendar.compo
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
+import {AppComponent} from "./app.component";
+import {RouterOutlet} from "@angular/router";
+import { LockScreenComponent } from './lock-screen/lock-screen.component';
+import { LockScreenModalComponent } from './UI-Elements/modals/lock-screen-modal/lock-screen-modal.component';
+
 
 @NgModule({
-  imports: [
-    AsyncPipe,
-    FormsModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    NgForOf,
-    MatDialogModule,
-    MatButtonModule,
-    MatCardModule,
-    MatTableModule,
-    DatePipe,
-    ReactiveFormsModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory,
-    }),
-    NgSwitch,
-    NgSwitchCase,
-    JsonPipe,
-  ],
+    imports: [
+        AsyncPipe,
+        FormsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        NgForOf,
+        MatDialogModule,
+        MatButtonModule,
+        MatCardModule,
+        MatTableModule,
+        DatePipe,
+        ReactiveFormsModule,
+        CalendarModule.forRoot({
+            provide: DateAdapter,
+            useFactory: adapterFactory,
+        }),
+        NgSwitch,
+        NgSwitchCase,
+        JsonPipe,
+        NgIdleKeepaliveModule.forRoot(),
+        NgIf
+    ],
     declarations: [
         CustomValidationDirective,
         ConfirmDialogComponent,
         ListHistoryComponent,
         ImageDirective,
         CalendarComponent,
+        LockScreenComponent,
   ],
     providers: [],
     exports: [
@@ -55,6 +64,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
         ListHistoryComponent,
         ImageDirective,
         CalendarComponent,
+        LockScreenComponent,
     ],
 })
 export class AppModule {

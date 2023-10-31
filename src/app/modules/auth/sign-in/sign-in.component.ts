@@ -163,28 +163,6 @@ export class AuthSignInComponent implements OnInit {
                             config: res['config']
                         }));
 
-                        /*let layout = 'bus'; // Par défaut
-                        if (formValue.api === 'https://api.capsule.mg/pascoma') {
-                        layout = 'hotel';
-                        }
-
-                        this.setLayout(layout)*/
-
-                        /*Swal.fire({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            showClass: {
-                                backdrop: 'swal2-noanimation',
-                                popup: '',
-                                icon: ''
-                            },
-                            timer: 9000,
-                            title: 'Success!',
-                            text: 'Vous etes Authentifier',
-                            icon: 'success',
-                        });*/
-
                         const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
                         this._router.navigateByUrl(redirectURL);
                     }

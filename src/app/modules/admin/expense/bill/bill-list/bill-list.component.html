@@ -21,7 +21,7 @@
                 </div>
             </form>
         </div>
-        <mat-tab-group animationDuration="0ms">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="5ms" class="mx-0 my-4">
             <mat-tab label="FACTURES">
                 <div class="flex justify-between">
                     <mat-form-field class="example-form-field w-1/5">
@@ -37,7 +37,7 @@
                     <button mat-flat-button color="primary" (click)="navigateToAddBill()">Ajout facture</button>
                 </div>
 
-                <div class="example-container mat-elevation-z8 mt-4">
+                <div class="example-container mat-elevation-z1 mt-4">
                     <div class="example-loading-shade"
                          *ngIf="isLoadingResults || isRateLimitReached">
                         <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
@@ -93,7 +93,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="BROUILLONS">
-                <table mat-table [dataSource]="dataDraft" class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataDraft" class="mat-elevation-z1">
 
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef> N°</th>

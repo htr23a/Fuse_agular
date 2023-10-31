@@ -11,6 +11,7 @@ import { User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
 import {SessionService} from "../../../core/services/session/session.service";
 import {ImageService} from "../../../core/services/print/image.service";
+import {AuthentificationService} from "../../../core/services/authentification/authentification.service";
 
 @Component({
     selector       : 'user',
@@ -42,7 +43,8 @@ export class UserComponent implements OnInit, OnDestroy
         private _router: Router,
         private _userService: UserService,
         private sessionService: SessionService,
-        private imageService: ImageService
+        private imageService: ImageService,
+        private  authService: AuthentificationService
     )
     {
     }
@@ -112,7 +114,7 @@ export class UserComponent implements OnInit, OnDestroy
      */
     signOut(): void
     {
-        this._router.navigate(['/sign-out']);
+        this.authService.logout()
     }
 
     private loadImage() {

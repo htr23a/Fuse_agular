@@ -44,9 +44,10 @@ export class AuthentificationService {
   }
 
   logout() {
-    sessionStorage.clear();
-    this._authenticated = false;
-    this.router.navigate(['/']);
+      console.log('log Out')
+      this.router.navigate(['/sign-out'])
+        sessionStorage.clear();
+        this._authenticated = false;
   }
 
   check(): Observable<boolean> {
